@@ -87,7 +87,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="mt-xxl-0 mt-xl-0 mt-lg-0 mt-md-0 mt-sm-0 mt-3">
+                <div class="mt-xxl-0 mt-xl-0 mt-lg-4 mt-md-4 mt-sm-0 mt-3">
                     <p class="text-center">Designed and developed by <a
                             href="https://smu.edu.in/smit/dept-faculty/dept-list/dept-ca-smit.html"
                             target="_blank">Department of Computer Applications</a>, Sikkim Manipal Institute of
