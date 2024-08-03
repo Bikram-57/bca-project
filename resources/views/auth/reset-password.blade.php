@@ -24,10 +24,10 @@
                         <h2 class="fw-bold text-secondary mt-3 mb-3 text-center">Reset Password</h2>
                         <form action="{{ route('password.store') }}" method="POST">
                             @csrf
-                            <input type="hidden" name="token" value="{{ $request->route('token') }}">
+                            <input type="hidden" name="token" value="{{ $token }}">
                             <div class="mb-3">
                                 <div class="input-group">
-                                    <input type="text" class="form-control" value="{{ old('email', $request->email) }}"
+                                    <input type="text" class="form-control" value="{{ old('email', $email) }}"
                                         name="email" required>
                                 </div>
                                 @error('email')

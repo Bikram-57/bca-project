@@ -23,6 +23,7 @@ class User extends Authenticatable
         'password',
         'is_faculty',
         'regno',
+        'last_seen',
     ];
 
     /**

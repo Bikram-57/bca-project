@@ -142,14 +142,6 @@ img {
     height: 200px;
 }
 
-/* fotter and nav*/
-/* @media(max-width:767.98){
-.navbar,
-footer{
-  width: 100%;
-}
-}
-*/
 
 /* Scroll Main Start */
 /* .container-fluid{ */
@@ -260,11 +252,6 @@ footer{
     color: #fff;
 }
 
-/* .btn-success {
-    background: #355389;
-    border: #355389;
-    color: #fff;
-} */
 
 .text-custom {
     color: #355389;

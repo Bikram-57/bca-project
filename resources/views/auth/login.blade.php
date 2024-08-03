@@ -12,7 +12,7 @@
 </head>
 
 <body style="background-color: aliceblue">
-    <div class="scroll-main">
+    <div class="">
         <main class="d-flex align-items-center vh-100 custom-margin">
             <div class="container">
                 <div class="row d-flex justify-content-center">
@@ -20,10 +20,19 @@
                         <h1 class="h2 text-custom fw-bold">Student Performance Assesment for<br>Outcome Based Education
                         </h1>
                     </div>
-
+                    <div class="row d-flex justify-content-center">
+                        <div class="col-xl-9 col-xxl-8">
+                            @if (session('success'))
+                                <div id="alertMessage" class="alert alert-success">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
+                        </div>
+                    </div>
                     <div class="col-xl-9 col-xxl-8">
                         <div class="login">
                             <div class="card shadow-lg p-xl-3 mb-xl-5 border-0">
+
                                 <div class="card-body">
                                     <div class="row py-xl-4">
                                         <div class="col-xl-6 d-flex align-items-center justify-content-center">

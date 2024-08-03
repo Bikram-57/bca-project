@@ -12,7 +12,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h4>Welcome {{ Auth::user()->name }}</h4>
-                            <p class="card-text text-muted">Last updated: 16-02-24</p>
+                            <p class="card-text text-muted">Last login: {{ \Carbon\Carbon::parse(Auth::user()->last_seen)->format('g:i A, F j, Y') }}</p>
                         </div>
                     </div>
                 </div>

@@ -29,7 +29,6 @@
                     <table class="table table-striped my-4">
                         <thead>
                             <tr>
-                                {{-- <th>Sl.No.</th> --}}
                                 <th>Faculty Name</th>
                                 <th>Subjects Assigned</th>
                                 <th>Action</th>
@@ -81,24 +80,16 @@
                                 </select>
                             </div>
                             <div class="col-12 mt-2">
-                                <label for="course" class="form-label">Course</label>
-                                <select id="course" name="course" class="form-select">
-                                    <option value="" selected disabled>Select course from list</option>
-                                    <option value="bca">BCA</option>
-                                    <option value="mca">MCA</option>
-                                    <!-- Add more options as needed -->
+                                <label for="year" class="form-label">Year</label>
+                                <select id="year" name="year" class="form-select">
+                                    <option value="" selected disabled>Select year from list</option>
+                                    <option value="2024">2024</option>
+                                    <option value="2023">2023</option>
+                                    <option value="2022">2022</option>
+                                    <option value="2021">2021</option>
+                                    <option value="2020">2020</option>
                                 </select>
                             </div>
-                            {{-- <div class="col-12 mt-2">
-                                <label for="semester" class="form-label">Semester</label>
-                                <select id="semester" name="semester" class="form-select">
-                                    <option value="" selected disabled>Select semester from list</option>
-                                    <option value="first">First</option>
-                                    <option value="second">Second</option>
-                                    <option value="third">Third</option>
-                                    <!-- Add more options as needed -->
-                                </select>
-                            </div> --}}
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -144,7 +135,6 @@
         </div>
     </div>
     {{-- assign subject edit modal end --}}
-    </div>
 @endsection
 @section('scripts')
     <script>
@@ -166,8 +156,9 @@
                             response.forEach(function(course) {
                                 var checkbox =
                                     '<div class="form-check"><input class="form-check-input" type="checkbox" value="' +
-                                    course.course_id + // Accessing the course ID
+                                    course.id + // Accessing the course ID
                                     '" name="checked_courses[]"><label class="form-check-label">' +
+                                    course.year + ' - ' + course.course_id + ' - ' +
                                     course.course_name +
                                     '</label></div>'; // Accessing the course name
                                 $('#subject-checkboxes').append(checkbox);

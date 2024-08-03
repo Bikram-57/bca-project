@@ -1,9 +1,13 @@
 <?php
 
-use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExcelController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SupportController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +22,24 @@ use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
     return view('auth.login');
-});
+})->name('home');
+
+Route::post('login', [AuthController::class, 'login'])->name('login');
+
+Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::get('forgot-password', function () {
+    return view('auth.forgot-password');
+})->name('password.request');
+
+Route::post('forgot-password', [AuthController::class, 'forgotPassword'])
+    ->name('password.email');
+
+Route::get('reset-password/{token}', [AuthController::class, 'resetPasswordView'])
+    ->name('password.reset');
+
+Route::post('reset-password', [AuthController::class, 'resetPassword'])
+    ->name('password.store');
 
 Route::middleware('auth')->group(function () {
     // Common routes accessible to both admin and faculty
@@ -42,16 +63,13 @@ Route::middleware('auth')->group(function () {
     Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+
+    Route::get('support', [SupportController::class, 'index'])->name('support');
+    Route::post('support/create-ticket', [SupportController::class, 'create'])->name('support.ticket.create');
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/', function () {
-        if (auth()->user()->is_faculty == 0) {
-            return redirect()->route('admin-dashboard');
-        } elseif (auth()->user()->is_faculty) {
-            return redirect()->route('dashboard');
-        }
-    });
     Route::middleware('admin')->prefix('admin')->group(function () {
         Route::get('dashboard', [DashboardController::class, 'index'])->name('admin-dashboard');
 
@@ -113,7 +131,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/export-courses', [ExcelController::class, 'exportCourses']);
 
 
-    //Admin Po Attainment
+    // Admin PO Attainment
 
     Route::get('subject-report', function () {
         return view('subject-report');
@@ -127,7 +145,20 @@ Route::middleware('auth')->group(function () {
         return view('error-404');
     })->name('error-404');
 
+    Route::middleware('support')->prefix('support')->group(function () {
+        Route::get('dashboard', [SupportController::class, 'dashboard'])->name('support-dashboard');
+        Route::get('all-tickets', [SupportController::class, 'allTickets'])->name('support-tickets');
+        Route::get('pending', [SupportController::class, 'pending'])->name('support-pending');
+        Route::get('resolved', [SupportController::class, 'resolved'])->name('support-resolved');
+        Route::get('view/{id}', [SupportController::class, 'view'])->name('support-ticket-view');
+        Route::put('update/{id}', [SupportController::class, 'updateStatus'])->name('support-ticket-update-status');
+    });
 
+    Route::get('confirm-password', function(){
+        return view('auth.confirm-password');
+    })->name('password.confirm');
+
+    // Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
+
+    Route::put('password', [ProfileController::class, 'updatePassword'])->name('password.update');
 });
-
-require __DIR__ . '/auth.php';

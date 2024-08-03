@@ -10,14 +10,8 @@
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
-    {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> --}}
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.js"></script> --}}
-
-    <style>
-        .text-warning{
-            color: #ff8c00;
-        }
-    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.js"></script>
 </head>
 
 <body>
@@ -29,90 +23,33 @@
                     <a href="#"><img src="{{ asset('assets/images/logo.png') }}" alt="logo"
                             class="img-fluid"></a>
                 </div>
-                @if (Auth::user()->is_faculty)
-                    <ul class="sidear-nav">
-                        <li class="sidebar-item {{ Route::is('dashboard') ? 'active' : '' }}">
-                            <a href="{{ route('dashboard') }}" class="sidebar-link">
-                                <i class="bi bi-sliders"></i> Dashboard
-                            </a>
-                        </li>
-                    @else
-                        <ul class="sidear-nav">
-                            <li class="sidebar-item {{ Route::is('admin-dashboard') ? 'active' : '' }}">
-                                <a href="{{ route('admin-dashboard') }}" class="sidebar-link">
-                                    <i class="bi bi-sliders"></i> Dashboard
-                                </a>
-                            </li>
-                @endif
-                <li class="sidebar-item">
-                    <span class="sidebar-link">
-                        <i class="bi bi-three-dots-vertical"></i> Menu
-                    </span>
-                </li>
-                <li class="sidebar-item {{ Route::is('upload') ? 'active' : '' }}">
-                    <a href="{{ route('upload') }}" class="sidebar-nested-link">
-                        <i class="bi bi-file-earmark-arrow-up-fill"></i> Upload Data
-                    </a>
-                </li>
-                <li class="sidebar-item {{ Route::is('fetch') ? 'active' : '' }}">
-                    <a href="{{ route('fetch') }}" class="sidebar-nested-link">
-                        <i class="bi bi-file-earmark-arrow-down-fill"></i> Fetch Data
-                    </a>
-                </li>
-                <li class="sidebar-item {{ Route::is('co_po_relation') ? 'active' : '' }}">
-                    <a href="{{ route('co_po_relation') }}" class="sidebar-nested-link">
-                        <i class="bi bi-cloud-arrow-up-fill"></i> CO-PO Relation
-                    </a>
-                </li>
-                @if (!Auth::user()->is_faculty)
-                    <li class="sidebar-item {{ Route::is('direct-attainment') ? 'active' : '' }}">
-                        <a href="{{ route('direct-attainment') }}" class="sidebar-nested-link">
-                            <i class="bi bi-cloud-arrow-up-fill"></i> Direct Attainment
+                <ul class="sidear-nav">
+                    <li class="sidebar-item {{ Route::is('support-dashboard') ? 'active' : '' }}">
+                        <a href="{{ route('support-dashboard') }}" class="sidebar-link">
+                            <i class="bi bi-sliders"></i> Dashboard
                         </a>
                     </li>
-                @endif
-
-                <li class="sidebar-item">
-                    <span class="sidebar-link">
-                        <i class="bi bi-clipboard2-data-fill"></i> Analysis
-                    </span>
-                </li>
-
-                <li class="sidebar-item {{ Route::is('subject-report') ? 'active' : '' }}">
-                    <a href="{{ route('subject-report') }}" class="sidebar-nested-link">
-                        <i class="bi bi-bar-chart-line"></i> Subject Report
-                    </a>
-                </li>
-
-                @if (!Auth::user()->is_faculty)
                     <li class="sidebar-item">
                         <span class="sidebar-link">
-                            <i class="bi bi-journal-text"></i> Subjects
+                            <i class="bi bi-three-dots-vertical"></i> Menu
                         </span>
                     </li>
-                    <li class="sidebar-item {{ request()->is('admin/manage-subjects') ? 'active' : '' }}">
-                        <a href="{{ route('manage-subjects') }}" class="sidebar-nested-link">
-                            <i class="bi bi-kanban-fill"></i> Manage Subjects
+                    <li class="sidebar-item {{ Route::is('support-tickets') ? 'active' : '' }}">
+                        <a href="{{ route('support-tickets') }}" class="sidebar-nested-link">
+                            <i class="bi bi-file-earmark-arrow-up-fill"></i> All Tickets
                         </a>
                     </li>
-                    <li class="sidebar-item {{ request()->is('admin/assign-subject') ? 'active' : '' }}">
-                        <a href="{{ route('assign-subject') }}" class="sidebar-nested-link">
-                            <i class="bi bi-card-checklist"></i> Assign Subjects
+                    <li class="sidebar-item {{ Route::is('support-pending') ? 'active' : '' }}">
+                        <a href="{{ route('support-pending') }}" class="sidebar-nested-link">
+                            <i class="bi bi-file-earmark-arrow-down-fill"></i> Pending Tickets
                         </a>
                     </li>
-
-                    <li class="sidebar-item">
-                        <span class="sidebar-link">
-                            <i class="bi bi-three-dots-vertical"></i> Faculty
-                        </span>
-                    </li>
-                    <li class="sidebar-item {{ request()->is('admin/manage-faculty') ? 'active' : '' }}">
-                        <a href="{{ route('manage-faculty') }}" class="sidebar-nested-link">
-                            <i class="bi bi-people-fill"></i> Manage Faculty
+                    <li class="sidebar-item {{ Route::is('support-resolved') ? 'active' : '' }}">
+                        <a href="{{ route('support-resolved') }}" class="sidebar-nested-link">
+                            <i class="bi bi-cloud-arrow-up-fill"></i> Resolved Tickets
                         </a>
                     </li>
-                    </ul>
-                @endif
+                </ul>
             </div>
         </aside>
 

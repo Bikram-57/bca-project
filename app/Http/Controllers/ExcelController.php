@@ -3,22 +3,16 @@
 namespace App\Http\Controllers;
 
 use Exception;
-use App\Models\CA2313;
 use App\Models\Courses;
 use App\Models\MaxMarksCO;
-use App\Models\ExcelUpload;
 use App\Models\TargetMarks;
 use App\Models\CoAttainment;
 use App\Models\CoPoRelation;
 use App\Models\SubjectMarks;
 use Illuminate\Http\Request;
 use App\Models\MoreThanSixty;
-use App\Exports\CoursesExport;
 use App\Models\FinalCoAttainment;
 use App\Models\AttainmentPercentage;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\DirectAttainmentExport;
-use Illuminate\Database\QueryException;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -212,9 +206,6 @@ class ExcelController extends Controller
         // Attempt to retrieve data from the specified model
         $data = SubjectMarks::where('cid', $cid)->where('batch', $batch)->get();
 
-        // if ($data->isEmpty())
-        //     return back()->with('error', 'No details found for the specified details');
-
         // Retrieve max marks
         $max_marks = MaxMarksCO::where('cid', $cid)->where('batch', $batch)->first();
 
@@ -323,8 +314,6 @@ class ExcelController extends Controller
             $co_attainment[$examArray[$index]] = $co_attainment_CO_PO;
             $index++;
         }
-        // dd($marks_more_than_sixty_percent_array);
-        // dd($attainmentPercentage);
 
         $query = MoreThanSixty::updateOrCreate(
             ['cid' => $cid, 'batch' => $batch],
@@ -391,39 +380,6 @@ class ExcelController extends Controller
             'file' => 'required|mimes:xls,xlsx',
         ]);
 
-        // $filePath = $request->file('file')->path();
-        // $courseId = $request->file('file')->getClientOriginalName();
-        // $courseId = strtoupper(str_replace(' ', '_', pathinfo($courseId, PATHINFO_FILENAME)));
-        // $spreadsheet = IOFactory::load($filePath);
-        // $worksheet = $spreadsheet->getActiveSheet();
-
-        // $highestRow = $worksheet->getHighestDataRow();
-        // $highestColumn = $worksheet->getHighestDataColumn();
-
-        // $expectedHeaders = ['Reg No', 'Q1', 'S1', 'Q2', 'S2', 'Assignment', 'End Sem'];
-
-        // // Loop through each row and store the data
-        // $excelData = [];
-        // $errors = [];
-        // $nullCount = 0;
-        // for ($row = 1; $row <= $highestRow; $row++) {
-        //     $rowData = $worksheet->rangeToArray('A' . $row . ':' . $highestColumn . $row, null, true, false);
-
-        //     // if(!is_null($rowData[0][0])){
-        //         $excelData[] = $rowData[0];
-        //     // }
-        //     // }else{
-        //     //     $nullCount++;
-
-        //     //     if($nullCount > 3){
-        //     //         break;
-        //     //     }
-        //     // }
-        //     // dd($rowData);
-        //     // echo $row;
-        // }
-
-
         $filePath = $request->file('file')->path();
         $courseId = $request->file('file')->getClientOriginalName();
         $courseId = strtoupper(str_replace(' ', '_', pathinfo($courseId, PATHINFO_FILENAME)));
@@ -435,12 +391,9 @@ class ExcelController extends Controller
 
         $expectedHeaders = ['Reg No', 'Q1', 'S1', 'Q2', 'S2', 'Assignment', 'End Sem'];
 
-
-
         // Loop through each row and store the data
         $excelData = [];
         $errors = [];
-        // $nullCount = 0;
         $executedRows = [];
         $rowEnd = false;
         for ($row = 1; $row <= $highestRow; $row++) {
@@ -461,7 +414,6 @@ class ExcelController extends Controller
                 $executedRows[] = $rowData[0][0];
             } else {
                 if ($rowEnd) {
-                    // dd($rowData[0][0]);
                     break;
                 }
             }
@@ -470,8 +422,6 @@ class ExcelController extends Controller
         if (!empty($errors)) {
             return back()->with('errorsArray', $errors);
         }
-
-        // dd($excelData);
 
         // Initialize an empty associative array
         $associativeArray = [];
@@ -513,7 +463,6 @@ class ExcelController extends Controller
         try {
             for ($row = 2; $row < count($excelData); $row++) {
                 $regno = $excelData[$row][0];
-                // echo $regno . ' row = ' . $row . "<br>";
                 for ($x = 1; $x < count($associativeArray); $x++) {
                     $start = $associativeArray[$header[$x]];
 
@@ -573,13 +522,10 @@ class ExcelController extends Controller
 
     public function export($course, $batch)
     {
-        // $batch = 2021;
-        // $course = "BCA";
         $cid = Courses::join('final_co_attainment', 'final_co_attainment.cid', '=', 'courses.cid')
             ->where('batch', $batch)
             ->where('courses.course', $course)
-            ->pluck('courses.cid')
-            ->toArray();
+            ->get();
 
 
         $poArray = CoPoRelation::join('final_co_attainment', 'final_co_attainment.cid', '=', 'co_po_relation.cid')
@@ -596,8 +542,6 @@ class ExcelController extends Controller
             ->map(function ($item) {
                 return json_decode($item, true);
             });
-
-        // dd($poArray, $cid, $grandTotalArray);
 
 
         // Create a new Spreadsheet instance
@@ -620,17 +564,12 @@ class ExcelController extends Controller
             $firstIteration = true;
             foreach (json_decode($poArray[$i], true) as $co => $r) {
                 $r = json_decode($r, true);
-                // $row = [
-                //     $cid[$i], // Course ID
-                //     $co, // CO
-                //     $grandTotalArray[$i][$co], // Attainment level
-                // ];
 
                 $row = [];
 
                 // Add Course ID if it's the first iteration
                 if ($firstIteration) {
-                    $row[] = $cid[$i]; // Course ID
+                    $row[] = $cid[$i]['cid'] . '-' . $cid[$i]['cname']; // Course ID
                     $firstIteration = false; // Set flag to false after adding CID for the first time
                 } else {
                     // Add an empty string for CID in subsequent iterations
@@ -685,12 +624,11 @@ class ExcelController extends Controller
         // Add the combined row to the spreadsheet starting from column A and row $rowIndex
         $sheet->fromArray([$row], null, $startingColumnIndex . $rowIndex);
 
-
         // Create a new Excel writer object
         $writer = new Xlsx($spreadsheet);
 
         // Set the file name
-        $filename = 'exported_table.xlsx';
+        $filename = $batch . '_' . $course . '_' . 'DIRECT_ATTAINMENT.xlsx';
 
         // Save the Excel file to storage
         $writer->save(storage_path('app/' . $filename));

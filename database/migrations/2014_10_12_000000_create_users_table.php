@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->integer('is_faculty')->default(1);
             $table->integer('regno')->default(0);
+            $table->timestamp('last_seen')->useCurrent();
             $table->rememberToken();
             $table->timestamps();
         });
